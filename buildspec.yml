@@ -14,7 +14,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t nodepipeline-devops .
+      - docker build -t nodepipeline-devops:latest .
       - docker tag nodepipeline-devops:latest $REPOSITORY_URI:latest
   post_build:
     commands:
