@@ -1,5 +1,5 @@
 FROM node:12
-RUN apt-get update && apt-get install git -y && apt-get install imagemagick -y;
+RUN sudo apt-get update && apt-get install git -y && apt-get install imagemagick -y;
 
 WORKDIR /ecs-app
 
@@ -15,4 +15,4 @@ ENV ENV_ECS=true
 USER node
 EXPOSE 80
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["sudo", "npm", "start"]
