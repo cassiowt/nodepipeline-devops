@@ -12,7 +12,7 @@ RUN chown -R node:node /ecs-app
 
 ENV NODE_ENV=production
 ENV ENV_ECS=true
-USER node
+USER root
 EXPOSE 80
 
 ENTRYPOINT ["npm", "start"]
