@@ -4,8 +4,7 @@ RUN apt-get update && apt-get install git -y && apt-get install imagemagick -y;
 WORKDIR /ecs-app
 
 COPY package*.json ./
-COPY controller controller
-COPY server.js server.js
+COPY . .
 
 RUN npm install
 RUN chown -R node:node /ecs-app
