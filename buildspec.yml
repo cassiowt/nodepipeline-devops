@@ -22,7 +22,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push 489323066454.dkr.ecr.us-east-1.amazonaws.com/nodepipeline-devops:latest
       - echo Writing image definitions file...
-      - printf '[{"name":"devops","imageUri":"%s"}]' 489323066454.dkr.ecr.us-east-1.amazonaws.com/nodepipeline-devops:latest > imagedefinitions.json
+      - printf '[{"name":"nodepipeline-devops","imageUri":"%s"}]' 489323066454.dkr.ecr.us-east-1.amazonaws.com/nodepipeline-devops:latest > imagedefinitions.json
       - cat imagedefinitions.json 
 artifacts:
     files: 
