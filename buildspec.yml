@@ -15,6 +15,7 @@ phases:
       - echo Building the Docker image...
       - docker build -t nodepipeline-devops .
       - docker tag nodepipeline-devops:latest 489323066454.dkr.ecr.us-east-1.amazonaws.com/nodepipeline-devops:latest
+      
   post_build:
     commands:
       - echo Build completed on `date`
