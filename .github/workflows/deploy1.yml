@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Deploy to Production Aula DevOps
 
 # Definir os gatilhos para o workflow
 on:
@@ -8,7 +8,7 @@ on:
 
 # Configuração das jobs do workflow
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest  # Executa em uma máquina Ubuntu
 
     steps:
@@ -27,32 +27,11 @@ jobs:
       run: npm install
 
     # 4. Rodar os testes (Opcional, pode ser removido se não for necessário)
-   # - name: Run tests
-   #   run: npm test
+    - name: Run tests
+      run: npm test
 
     # 5. Criar os artefatos ou build (depende da aplicação)
     - name: Build the application
       run: npm run build
 
-    # 5.1. Estabelecer conexão SSH com a instância EC2
-  #  - name: Set up SSH
-  #    run: |
-   #     mkdir -p ~/.ssh
-    #    echo ${{ secrets.SSH_PRIVATE_KEY }}  > ~/.ssh/id_rsa
-     #   chmod 600 ~/.ssh/id_rsa
-
-    # 6. Fazer o deploy
-    - name: Deploy to server via SSH
-      uses: appleboy/ssh-action@v0.1.0  # Action para SSH
-      with:
-        host: ${{ secrets.HOST }}  # Defina isso no repositório em Secrets
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
-        port: 22
-        script: |
-          cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
-          cd nodepipeline-devops
-          git pull origin main  # Ou outro comando para atualizar o código
-          npm install
-          pm2 restart app  # Exemplo para reiniciar a aplicação Node.js com PM2
-
+ 

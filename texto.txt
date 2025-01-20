@@ -1,0 +1,22 @@
+   # 5.1. Estabelecer conexão SSH com a instância EC2
+  #  - name: Set up SSH
+  #    run: |
+   #     mkdir -p ~/.ssh
+    #    echo ${{ secrets.SSH_PRIVATE_KEY }}  > ~/.ssh/id_rsa
+     #   chmod 600 ~/.ssh/id_rsa
+
+    # 6. Fazer o deploy
+    - name: Deploy to server via SSH
+      uses: appleboy/ssh-action@v0.1.0  # Action para SSH
+      with:
+        host: ${{ secrets.HOST }}  # Defina isso no repositório em Secrets
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
+        port: 22
+        script: |
+          cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
+          cd nodepipeline-devops
+          git pull origin main  # Ou outro comando para atualizar o código
+          npm install
+          pm2 restart app  # Exemplo para reiniciar a aplicação Node.js com PM2
+
