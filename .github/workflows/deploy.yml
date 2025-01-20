@@ -15,11 +15,11 @@ jobs:
       uses: actions/checkout@v2
 
     # 2. Configurar AWS CLI
-    - name: Set up AWS CLI
-      run: |
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws configure set region us-east-1  # Altere para sua região
+    # - name: Set up AWS CLI
+    #  run: |
+    #   aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #   aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #   aws configure set region us-east-1  # Altere para sua região
   
     
     # 3. Estabelecer conexão SSH com a instância EC2
