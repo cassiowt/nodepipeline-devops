@@ -20,6 +20,7 @@ jobs:
         aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws configure set region us-east-1  # Altere para sua região
+  
     
     # 3. Estabelecer conexão SSH com a instância EC2
     - name: Set up SSH
@@ -32,7 +33,7 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /path/to/your/project || git clone https://github.com/yourusername/yourrepository.git
+          cd /aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
           cd yourrepository
           git pull origin main
           npm install  # Ou o comando adequado para seu projeto
