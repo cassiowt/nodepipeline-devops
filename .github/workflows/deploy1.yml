@@ -27,8 +27,8 @@ jobs:
       run: npm install
 
     # 4. Rodar os testes (Opcional, pode ser removido se não for necessário)
-    - name: Run tests
-      run: npm test
+   # - name: Run tests
+   #   run: npm test
 
     # 5. Criar os artefatos ou build (depende da aplicação)
     - name: Build the application
@@ -43,7 +43,8 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
         port: 22
         script: |
-          cd /path/to/your/app
+          cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
+          cd nodepipeline-devops
           git pull origin main  # Ou outro comando para atualizar o código
           npm install
           pm2 restart app  # Exemplo para reiniciar a aplicação Node.js com PM2

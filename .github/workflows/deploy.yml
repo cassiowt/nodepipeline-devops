@@ -33,8 +33,8 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
-          cd yourrepository
+          cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
+          cd nodepipeline-devops
           git pull origin main
           npm install  # Ou o comando adequado para seu projeto
           pm2 restart app || pm2 start server.js  # Caso utilize PM2 para gerenciamento de processos
