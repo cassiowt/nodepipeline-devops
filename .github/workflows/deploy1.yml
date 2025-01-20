@@ -35,11 +35,11 @@ jobs:
       run: npm run build
 
     # 5.1. Estabelecer conexão SSH com a instância EC2
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo ${{ secrets.SSH_PRIVATE_KEY }}  > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+  #  - name: Set up SSH
+  #    run: |
+   #     mkdir -p ~/.ssh
+    #    echo ${{ secrets.SSH_PRIVATE_KEY }}  > ~/.ssh/id_rsa
+     #   chmod 600 ~/.ssh/id_rsa
 
     # 6. Fazer o deploy
     - name: Deploy to server via SSH
