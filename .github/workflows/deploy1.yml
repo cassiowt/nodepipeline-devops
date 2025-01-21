@@ -35,13 +35,7 @@ jobs:
       run: npm run build
 
 
-  
-  deploy:
-  
-    runs-on: ubuntu-latest   # Executa em uma máquina Ubuntu
-    
-    steps:
-    # 1. Fazer o deploy para o servidor via SSH
+    # 6. Fazer o deploy para o servidor via SSH
     - name: Deploy to server via SSH
       uses: appleboy/ssh-action@v0.1.0  # Action para SSH
       with:
