@@ -27,15 +27,7 @@ Para criar um roteiro detalhado de como criar uma conta na AWS com imagens, aqui
 
 ### **Passo 3: Escolha o tipo de conta**
 1. A AWS solicitará que você escolha entre:
-   - **Conta Pessoal**: Para uso individual.
-   - **Conta Corporativa**: Para empresas.
-2. Selecione o tipo de conta e preencha os dados adicionais, como:
-   - Nome completo.
-   - Nome da empresa (se aplicável).
-   - Número de telefone.
-   - País e endereço.
 
-*Imagem de referência: Tela de seleção do tipo de conta.*
 
 ---
 
