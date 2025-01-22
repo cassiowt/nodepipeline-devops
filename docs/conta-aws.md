@@ -10,7 +10,7 @@ Para criar um roteiro detalhado de como criar uma conta na AWS com imagens, aqui
 3. Clique no botão **"Criar uma conta da AWS"** ou **"Sign up"**, geralmente localizado no canto superior direito da página.
 
 *Imagem de referência (página inicial da AWS):*
-![AWS Homepage](https://d1.awsstatic.com/webteam/images/site-header/logo.png) *(Adicione uma captura real da página inicial da AWS para melhor entendimento.)*
+![AWS Homepage](../git/nodepipeline-devops/images/aws1.png) *(Adicione uma captura real da página inicial da AWS para melhor entendimento.)*
 
 ---
 
