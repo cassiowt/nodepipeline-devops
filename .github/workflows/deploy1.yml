@@ -44,6 +44,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
         port: 22
         script: |
+          sudo set enforce 0
           cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
           cd nodepipeline-devops
           git pull origin main  # Ou outro comando para atualizar o código
