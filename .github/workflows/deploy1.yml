@@ -37,7 +37,7 @@ jobs:
 
     # 6. Fazer o deploy para o servidor via SSH
     - name: Deploy to server via SSH
-      uses: appleboy/ssh-action@v0.1.0  # Action para SSH
+      uses: appleboy/ssh-action@v1.2.0  # Action para SSH
       with:
         host: ${{ secrets.HOST }}  # Defina isso no repositório em Secrets
         username: ${{ secrets.USERNAME }}
