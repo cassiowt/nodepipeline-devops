@@ -48,7 +48,8 @@ jobs:
           cd nodepipeline-devops
           git pull origin main  # Ou outro comando para atualizar o código
           npm install
-          pm2 restart server.js  # Exemplo para reiniciar a aplicação Node.js com PM2
+          ppm2 delete server 2>/dev/null
+          pm2 start server.js  # Exemplo para reiniciar a aplicação Node.js com PM2
 
 
  
