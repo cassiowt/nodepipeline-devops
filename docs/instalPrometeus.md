@@ -36,7 +36,7 @@ scrape_configs:
 
 Execute:
 ```sh
-docker run --rm -it -p 9090:9090 \
+docker run -d --rm -it -p 9090:9090 \
   -v ~/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
   -v ~/prometheus/data:/prometheus \
   prom/prometheus
