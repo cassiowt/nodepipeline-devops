@@ -1,3 +1,4 @@
+
 # **Tutorial: Como Usar o Grafana para Monitoramento**
 
 O **Grafana** é uma poderosa plataforma open-source para monitoramento e visualização de dados. Ele permite criar dashboards interativos e dinâmicos a partir de diversas fontes de dados, como **Prometheus, InfluxDB, MySQL, PostgreSQL, ElasticSearch**, entre outras.
@@ -10,8 +11,12 @@ Antes de instalar, certifique-se de ter:
 - Docker instalado na máquina.
 - Uma fonte de dados (ex: Prometheus).
 
-### **1.2 Criando Volumes para Persistência**
-Para manter os dados salvos mesmo após a reinicialização do container, crie volumes no Docker:
+### **1.2 Criando Diretório e Volumes para Persistência**
+Para manter os dados salvos mesmo após a reinicialização do container, crie um diretório específico para o Grafana:
+```sh
+mkdir -p ~/grafana/data
+```
+Em seguida, crie volumes no Docker:
 ```sh
 docker volume create grafana-data
 ```
@@ -22,6 +27,7 @@ Execute o seguinte comando para rodar o Grafana com as portas 3001 e 9090:
 docker run -d --name grafana \
   -p 3001:3000 \
   -v grafana-data:/var/lib/grafana \
+  -v ~/grafana/data:/var/lib/grafana \
   grafana/grafana
 ```
 Agora, acesse Grafana pelo navegador: **http://localhost:3001**
