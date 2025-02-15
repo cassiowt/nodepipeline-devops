@@ -26,7 +26,7 @@ Execute o seguinte comando para rodar o Grafana com as portas 3001 e 9090:
 ```sh
 docker run -d --name grafana \
   -p 3001:3000 \
-  -v grafana/data:/var/lib/grafana \
+  -v grafana-data:/var/lib/grafana \
   grafana/grafana
 ```
 Agora, acesse Grafana pelo navegador: **http://localhost:3001**
