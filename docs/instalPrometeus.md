@@ -40,9 +40,35 @@ sudo chown -R prometheus:prometheus /var/lib/prometheus
 ```
 
 ### **1.3 Instalando via Docker**
+
+crie um diretório local:
+
 ```sh
-docker run -d --name prometheus -p 9090:9090 \
-  -v /path/to/prometheus.yml:/etc/prometheus/prometheus.yml \
+mkdir -p ~/prometheus
+cd ~/prometheus
+```
+
+Agora, crie um arquivo de configuração básico prometheus.yml:
+```sh
+vi  prometheus.yml
+```
+
+Adicione o seguinte conteúdo:
+```yaml
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+```
+
+Execute:
+```sh
+docker run --rm -it -p 9090:9090 \
+  -v ~/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+  -v ~/prometheus/data:/prometheus \
   prom/prometheus
 ```
 
