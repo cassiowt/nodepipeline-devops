@@ -15,7 +15,8 @@ Antes de instalar, certifique-se de que:
 - O Java está instalado para o Logstash:
 
 ```sh
-sudo apt update && sudo apt install -y default-jre
+sudo amazon-linux-extras enable corretto8
+sudo yum install -y java-1.8.0-amazon-corretto
 ```
 
 ### **1.2 Criando Diretório e Instalando com Docker (Método Rápido)**
