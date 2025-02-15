@@ -95,9 +95,3 @@ Agora você tem um painel de monitoramento dinâmico!
 4. Compartilhe com sua equipe!
 
 ---
-
-## **7. Conclusão**
-Agora você configurou o Grafana usando Docker, adicionou uma fonte de dados, criou dashboards e alertas. O próximo passo é **customizar visualizações e otimizar seu monitoramento**!
-
-Se precisar de ajuda, me avise! 🚀
-
