@@ -86,5 +86,5 @@ Adicione ao **Prometheus** (`prometheus.yml`):
 Reinicie o Prometheus:
 ```sh
 sudo systemctl restart prometheus
-```�
+```
 
