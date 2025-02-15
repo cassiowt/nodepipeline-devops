@@ -32,16 +32,19 @@ app.use((req, res, next) => {
 });
 
 // Rota de métricas para Prometheus
-app.get('/metrics', async (req, res) => {
-    res.set('Content-Type', register.contentType);
-    res.end(await register.metrics());
-});
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // API
 app.use('/', require('./controller/controller'));
+
+//Metrics
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
+});
 
 // Static
 app.get('/index', function(req, res) {
