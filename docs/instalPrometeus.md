@@ -75,12 +75,13 @@ Aqui, você pode:
 Os **Exporters** são responsáveis por expor métricas para o Prometheus. Alguns dos mais usados são:
 
 ### **5.1 Node Exporter (Métricas do Servidor)**
-[https://github.com/cassiowt/nodepipeline-devops](teste)
+[Node Pipeline](https://github.com/cassiowt/nodepipeline-devops)
+
 Adicione ao **Prometheus** (`prometheus.yml`):
 ```yaml
-  - job_name: 'node-exporter'
+  - job_name: 'node'
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['localhost:3000']
 ```
 Reinicie o Prometheus:
 ```sh
