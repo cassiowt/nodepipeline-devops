@@ -10,36 +10,8 @@ O **Prometheus** é uma ferramenta **open-source** de monitoramento e alertas de
 - Acesso root ou permissões de sudo
 - Curl ou wget para download
 
-### **1.2 Instalando no Linux (Ubuntu/Debian)**
-```sh
-# Baixar o Prometheus
-wget https://github.com/prometheus/prometheus/releases/download/v2.46.0/prometheus-2.46.0.linux-amd64.tar.gz
 
-# Extrair os arquivos
-tar -xvf prometheus-2.46.0.linux-amd64.tar.gz
-
-# Mover para um diretório apropriado
-mv prometheus-2.46.0.linux-amd64 /usr/local/prometheus
-
-# Criar um usuário para rodar o Prometheus
-sudo useradd --no-create-home --shell /bin/false prometheus
-
-# Criar diretórios de configuração e armazenamento de dados
-sudo mkdir /etc/prometheus
-sudo mkdir /var/lib/prometheus
-
-# Mover os arquivos de configuração para /etc
-sudo mv /usr/local/prometheus/prometheus.yml /etc/prometheus/
-sudo mv /usr/local/prometheus/consoles /etc/prometheus/
-sudo mv /usr/local/prometheus/console_libraries /etc/prometheus/
-
-# Definir permissões corretas
-sudo chown -R prometheus:prometheus /usr/local/prometheus
-sudo chown -R prometheus:prometheus /etc/prometheus
-sudo chown -R prometheus:prometheus /var/lib/prometheus
-```
-
-### **1.3 Instalando via Docker**
+### **1.2 Instalando via Docker**
 
 crie um diretório local:
 
@@ -70,73 +42,20 @@ docker run --rm -it -p 9090:9090 \
   -v ~/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
   -v ~/prometheus/data:/prometheus \
   prom/prometheus
-```
+``
 
 ---
 
-## **2. Configuração do Prometheus**
-### **2.1 Arquivo de Configuração `prometheus.yml`**
-O arquivo de configuração do Prometheus está localizado em `/etc/prometheus/prometheus.yml`.
-
-Edite o arquivo com:
+## **2. Veririfcando o Prometheus**
 ```sh
-sudo nano /etc/prometheus/prometheus.yml
+docker ps
 ```
 
-Adicione ou modifique as seguintes configurações:
-```yaml
-global:
-  scrape_interval: 15s  # Tempo de coleta das métricas
-
-scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['192.168.1.100:9100']  # IP do Node Exporter
+```bash
+CONTAINER ID   IMAGE             STATUS        PORTS                    NAMES
+a1b2c3d4e5f6   prom/prometheus   Up 5 hours   0.0.0.0:9090->9090/tcp    prometheus
 ```
-Salve (`CTRL + X`, `Y`, `ENTER`).
 
----
-
-## **3. Iniciando o Prometheus**
-Para iniciar o Prometheus, execute:
-```sh
-/usr/local/prometheus/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus
-```
-Se desejar rodar como um serviço no **systemd**, crie um arquivo:
-```sh
-sudo nano /etc/systemd/system/prometheus.service
-```
-Adicione:
-```ini
-[Unit]
-Description=Prometheus Monitoring
-Wants=network-online.target
-After=network-online.target
-
-[Service]
-User=prometheus
-Group=prometheus
-Type=simple
-ExecStart=/usr/local/prometheus/prometheus --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-Salve e inicie o serviço:
-```sh
-sudo systemctl daemon-reload
-sudo systemctl enable prometheus
-sudo systemctl start prometheus
-```
-Verifique o status:
-```sh
-sudo systemctl status prometheus
-```
 
 ---
 
