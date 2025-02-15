@@ -48,8 +48,8 @@ http://localhost:3001
 
 ## **3. Adicionando uma Fonte de Dados**
 ### **3.1 Configurar o Prometheus como fonte de dados**
-1. Vá para **Configuration > Data Sources**.
-2. Clique em **Add Data Source**.
+1. Vá para **Connections > Add Data Source**.
+2. Clique em **Data Source**.
 3. Escolha **Prometheus**.
 4. No campo **URL**, insira:
    ```
