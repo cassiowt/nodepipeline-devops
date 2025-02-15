@@ -6,10 +6,8 @@ O **Prometheus** é uma ferramenta **open-source** de monitoramento e alertas de
 
 ## **1. Instalação do Prometheus**
 ### **1.1 Requisitos**
-- Um servidor **Linux** (Ubuntu, Debian, CentOS) ou **Docker**
+- Um servidor **Linux** (Ubuntu, Debian, CentOS) com  **Docker**
 - Acesso root ou permissões de sudo
-- Curl ou wget para download
-
 
 ### **1.2 Instalando via Docker**
 
@@ -47,9 +45,11 @@ docker run --rm -it -p 9090:9090 \
 ---
 
 ## **2. Veririfcando o Prometheus**
+Execute:
 ```sh
 docker ps
 ```
+Deve aparecer algo semelhante a isso:
 
 ```bash
 CONTAINER ID   IMAGE             STATUS        PORTS                    NAMES
