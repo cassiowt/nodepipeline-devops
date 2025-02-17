@@ -46,7 +46,7 @@ Agora todo o tráfego da instância EC2 será registrado no CloudWatch Logs.
 3. No menu superior, clique em **Criar Métrica de Filtro**.
 4. No campo de padrão de filtro, insira:
    ```
-   "54.91.17.153 3000 /about"
+   "meuservidor 3000 /about"
    ```
 5. Clique em **Criar Filtro de Métrica** e dê um nome, como `MonitoramentoHTTP`.
 6. Vá para **Alarmes** e clique em **Criar Alarme**.
