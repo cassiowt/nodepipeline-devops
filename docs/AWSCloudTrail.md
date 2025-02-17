@@ -1,8 +1,8 @@
-# **Tutorial: Exemplo de Evento no AWS CloudTrail - Chamada de API para Criar uma Instância EC2**
+# **Tutorial: Monitorando Chamadas HTTP no AWS CloudTrail**
 
-O **AWS CloudTrail** é um serviço que registra ações realizadas na AWS, permitindo auditoria e monitoramento de atividades. Neste tutorial, vamos aprender a visualizar um evento gerado no CloudTrail quando uma **instância EC2 é criada via API**.
+O **AWS CloudTrail** é um serviço que registra ações realizadas na AWS, permitindo auditoria e monitoramento de atividades. Neste tutorial, vamos aprender a monitorar chamadas HTTP específicas na sua instância EC2, como o endpoint:
 
-🔗 **Referência**: [AWS CloudTrail](http://meuservidor:3000/about)
+🔗 **URL a ser monitorada**: [http://54.91.17.153:3000/about](http://meuservidor:3000/about)
 
 ---
 
@@ -16,85 +16,59 @@ O **AWS CloudTrail** é um serviço que registra ações realizadas na AWS, perm
 1. Clique em **Criar trilha**.
 2. Defina um nome para a trilha (exemplo: `MeuCloudTrail`).
 3. Escolha um bucket S3 para armazenar os logs ou crie um novo.
-4. Ative o **CloudWatch Logs** se quiser monitoramento contínuo.
+4. Ative o **CloudWatch Logs** para monitoramento contínuo.
 5. Clique em **Criar**.
 
-Agora o CloudTrail está configurado para capturar eventos de API na conta.
+Agora o CloudTrail está configurado para capturar eventos na conta.
 
 ---
 
-## **2. (se não tiver a instacia) Criando uma Instância EC2 via API**
-### **2.1 Autenticando no AWS CLI**
-Antes de criar a instância, autentique-se no terminal:
-```sh
-aws configure
-```
-Insira suas credenciais **AWS Access Key ID** e **Secret Access Key**.
+## **2. Monitorando Chamadas HTTP na Instância EC2**
+### **2.1 Habilitando os Logs do VPC Flow**
+Para capturar o tráfego HTTP na sua instância EC2, é necessário ativar os logs de fluxo da VPC:
 
-### **2.2 Criando a Instância EC2**
-Execute o seguinte comando para criar uma instância EC2:
-```sh
-aws ec2 run-instances \
-  --image-id ami-0abcdef1234567890 \
-  --count 1 \
-  --instance-type t2.micro \
-  --key-name MeuKeyPair \
-  --security-groups MeuSecurityGroup
-```
-Anote o **Instance ID** retornado, pois será útil para encontrar o evento no CloudTrail.
+1. No **AWS Console**, acesse **VPC**.
+2. No menu lateral, clique em **Flow Logs**.
+3. Clique em **Criar Flow Log**.
+4. Selecione a **VPC associada à sua instância EC2**.
+5. Escolha **Destino do Log** como **CloudWatch Logs**.
+6. Crie ou selecione um grupo de logs do CloudWatch.
+7. Clique em **Criar**.
+
+Agora todo o tráfego da instância EC2 será registrado no CloudWatch Logs.
 
 ---
 
-## **3. Visualizando o Evento no CloudTrail**
-### **3.1 Acessando os Eventos no Console**
+## **3. Criando um Alarme no CloudWatch para Monitoramento HTTP**
+### **3.1 Criando um Alarme para Monitorar o Endpoint**
+1. No painel do **CloudWatch**, clique em **Logs > Log Groups**.
+2. Escolha o grupo de logs criado para o **Flow Logs da VPC**.
+3. No menu superior, clique em **Criar Métrica de Filtro**.
+4. No campo de padrão de filtro, insira:
+   ```
+   "54.91.17.153 3000 /about"
+   ```
+5. Clique em **Criar Filtro de Métrica** e dê um nome, como `MonitoramentoHTTP`.
+6. Vá para **Alarmes** e clique em **Criar Alarme**.
+7. Selecione a métrica `MonitoramentoHTTP`.
+8. Escolha um limite, como **se houver mais de 5 requisições em 5 minutos**.
+9. Configure um **SNS Topic** para receber notificações por e-mail.
+10. Clique em **Criar Alarme**.
+
+Agora, sempre que houver acesso ao endpoint **/about**, você será notificado!
+
+---
+
+## **4. Visualizando os Eventos no CloudTrail**
 1. No **AWS Console**, acesse **CloudTrail**.
 2. Clique em **Eventos de Histórico** no menu lateral.
-3. Use o campo de busca para procurar pelo evento **RunInstances**.
-4. Filtre pelo **Event Name: RunInstances** ou pelo **Instance ID** anotado.
-
-### **3.2 Exemplo de Evento JSON**
-Abaixo está um exemplo do evento gerado pelo CloudTrail quando uma instância EC2 é criada:
-```json
-{
-  "eventTime": "2024-03-10T14:30:00Z",
-  "eventSource": "ec2.amazonaws.com",
-  "eventName": "RunInstances",
-  "awsRegion": "us-east-1",
-  "sourceIPAddress": "198.51.100.1",
-  "userAgent": "aws-cli/2.10.0 Python/3.9",
-  "requestParameters": {
-    "instancesSet": {
-      "items": [{
-        "instanceType": "t2.micro",
-        "imageId": "ami-0abcdef1234567890"
-      }]
-    }
-  },
-  "responseElements": {
-    "instancesSet": {
-      "items": [{
-        "instanceId": "i-0123456789abcdef0",
-        "currentState": "pending"
-      }]
-    }
-  }
-}
-```
-Este evento confirma a criação da instância EC2.
-
----
-
-## **4. Criando Alertas no CloudWatch Logs**
-Para receber notificações quando uma instância EC2 for criada:
-1. No **CloudTrail**, ative a integração com o **CloudWatch Logs**.
-2. No **CloudWatch**, vá em **Logs > Log Groups** e crie um grupo de logs para o CloudTrail.
-3. Crie uma **Regra de Alarme** para filtrar eventos com `eventName: "RunInstances"`.
-4. Defina um SNS Topic para receber notificações por e-mail ou SMS.
+3. Use o campo de busca para procurar **eventos de chamadas HTTP**.
+4. Filtre pelo **IP da instância EC2 ou pelo endpoint específico**.
 
 ---
 
 ## **5. Conclusão**
-Agora você sabe como capturar e visualizar eventos do CloudTrail quando uma instância EC2 é criada via API. Isso permite **auditoria, segurança e automação** no seu ambiente AWS.
+Agora você configurou o CloudTrail e o CloudWatch Logs para monitorar acessos ao endpoint **http://meuservidor:3000/about** na sua instância EC2. Com isso, é possível **identificar tráfego suspeito, auditorar acessos e receber alertas** em tempo real.
 
 Se precisar de mais ajuda, me avise! 🚀
 
