@@ -36,10 +36,10 @@ scrape_configs:
 
 Execute:
 ```sh
-docker run -d --rm -it -p 9090:9090 \
+sudo docker run -d --rm -it --name prometheus -p 9090:9090 \
   -v ~/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
   -v ~/prometheus/data:/prometheus \
-  prom/prometheus
+  prom/prometheus 
 ```
 
 ---
@@ -75,20 +75,16 @@ Aqui, você pode:
 Os **Exporters** são responsáveis por expor métricas para o Prometheus. Alguns dos mais usados são:
 
 ### **5.1 Node Exporter (Métricas do Servidor)**
-```sh
-wget https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
-tar -xvf node_exporter-1.5.0.linux-amd64.tar.gz
-mv node_exporter-1.5.0.linux-amd64 /usr/local/node_exporter
-/usr/local/node_exporter/node_exporter --web.listen-address=":9100"
-```
+[Node Pipeline](https://github.com/cassiowt/nodepipeline-devops)
+
 Adicione ao **Prometheus** (`prometheus.yml`):
 ```yaml
-  - job_name: 'node-exporter'
+  - job_name: 'node'
     static_configs:
-      - targets: ['localhost:9100']
+      - targets: ['localhost:3000']
 ```
 Reinicie o Prometheus:
 ```sh
 sudo systemctl restart prometheus
-```�
+```
 
