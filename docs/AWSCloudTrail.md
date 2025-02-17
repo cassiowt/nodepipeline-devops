@@ -2,7 +2,7 @@
 
 O **AWS CloudTrail** é um serviço que registra ações realizadas na AWS, permitindo auditoria e monitoramento de atividades. Neste tutorial, vamos aprender a monitorar chamadas HTTP específicas na sua instância EC2, como o endpoint:
 
-🔗 **URL a ser monitorada**: [http://54.91.17.153:3000/about](http://meuservidor:3000/about)
+🔗 **URL a ser monitorada**: [http://meuservidor/about](http://meuservidor:3000/about)
 
 ---
 
