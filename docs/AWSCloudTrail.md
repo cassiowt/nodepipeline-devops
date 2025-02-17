@@ -28,12 +28,13 @@ Agora o CloudTrail está configurado para capturar eventos na conta.
 Para capturar o tráfego HTTP na sua instância EC2, é necessário ativar os logs de fluxo da VPC:
 
 1. No **AWS Console**, acesse **VPC**.
-2. No menu lateral, clique em **Flow Logs**.
-3. Clique em **Criar Flow Log**.
-4. Selecione a **VPC associada à sua instância EC2**.
+2. Acesse a **Subnet**
+3. Abaixo em  **Flow Logs**.
+4. Clique em **Criar Flow Log**.
 5. Escolha **Destino do Log** como **CloudWatch Logs**.
 6. Crie ou selecione um grupo de logs do CloudWatch.
-7. Clique em **Criar**.
+7. Crie **Create and use a new service role**
+8. Clique em **Criar**.
 
 Agora todo o tráfego da instância EC2 será registrado no CloudWatch Logs.
 
