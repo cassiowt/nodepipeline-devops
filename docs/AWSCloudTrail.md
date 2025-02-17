@@ -2,7 +2,7 @@
 
 O **AWS CloudTrail** é um serviço que registra ações realizadas na AWS, permitindo auditoria e monitoramento de atividades. Neste tutorial, vamos aprender a visualizar um evento gerado no CloudTrail quando uma **instância EC2 é criada via API**.
 
-🔗 **Referência**: [AWS CloudTrail](http://54.91.17.153:3000/about)
+🔗 **Referência**: [AWS CloudTrail](http://meuservidor:3000/about)
 
 ---
 
@@ -23,7 +23,7 @@ Agora o CloudTrail está configurado para capturar eventos de API na conta.
 
 ---
 
-## **2. Criando uma Instância EC2 via API**
+## **2. (se não tiver a instacia) Criando uma Instância EC2 via API**
 ### **2.1 Autenticando no AWS CLI**
 Antes de criar a instância, autentique-se no terminal:
 ```sh
