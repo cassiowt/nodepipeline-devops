@@ -29,8 +29,8 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
 1. **Instalar Docker**:
    ```bash
-   sudo yum update -y
-   sudo yum install -y docker
+   sudo yum update -y 
+   sudo yum install -y docker 
    sudo systemctl start docker
    sudo systemctl enable docker
    ```
