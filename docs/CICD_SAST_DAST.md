@@ -7,7 +7,7 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 2. Instância **EC2** rodando no **Amazon Linux 2** ou **Ubuntu**.
 3. Repositório GitHub com o código da aplicação Node.js no repositório **[nodepipeline-devops](https://github.com/cassiowt/nodepipeline-devops)**.
 4. **Docker** e **Docker Compose** instalados na instância EC2.
-5. **Jenkins** ou outra ferramenta de CI configurada.
+5. **GitLab CI/CD configurado**.
 
 ---
 
@@ -29,15 +29,15 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
 1. **Instalar Docker**:
    ```bash
-   sudo yum update -y 
-   sudo yum install -y docker  
-   sudo systemctl start docker 
-   sudo systemctl enable docker 
+   sudo yum update -y
+   sudo yum install -y docker
+   sudo systemctl start docker
+   sudo systemctl enable docker
    ```
 
 2. **Instalar Docker Compose**:
    ```bash
-   sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
+   sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
    sudo chmod +x /usr/local/bin/docker-compose
    ```
 
@@ -124,48 +124,56 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
 ---
 
-## Passo 5: Configuração do Jenkins ou CI/CD
+## Passo 5: Configuração do GitLab CI/CD
 
-1. **Criar um Pipeline Jenkins**:
-   - **Exemplo de Jenkinsfile**:
-     ```groovy
-     pipeline {
-       agent any
-       stages {
-         stage('Checkout') {
-           steps {
-             checkout scm
-           }
-         }
-         stage('SonarQube Analysis') {
-           steps {
-             script {
-               sh 'sonar-scanner -Dsonar.host.url=http://<ec2-public-ip>:8080'
-             }
-           }
-         }
-         stage('OWASP ZAP Scan') {
-           steps {
-             script {
-               sh 'docker run --rm -u zap zaproxy/zap2docker-stable zap-baseline.py -t http://<application-url>'
-             }
-           }
-         }
-       }
-     }
+1. **Criar um Pipeline GitLab CI/CD**:
+   - Crie um arquivo **`.gitlab-ci.yml`** na raiz do repositório com o seguinte conteúdo:
+     ```yaml
+     stages:
+       - code-analysis
+       - security-test
+
+     variables:
+       SONAR_HOST_URL: "http://<ec2-public-ip>:8080"
+       SONAR_TOKEN: "<seu-token-sonarqube>"
+
+     sonarqube-analysis:
+       stage: code-analysis
+       image: sonarsource/sonar-scanner-cli
+       script:
+         - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+       only:
+         - main
+
+     owasp-zap-scan:
+       stage: security-test
+       image: owasp/zap2docker-stable
+       script:
+         - zap-baseline.py -t http://<application-url>
+       only:
+         - main
      ```
 
-2. **Configuração de Webhooks**:
-   - Configure webhooks no seu repositório GitHub para disparar o pipeline sempre que um commit for feito.
+2. **Habilitar o GitLab Runner**:
+   - No GitLab, vá até **Settings > CI/CD > Runners**.
+   - Registre um novo runner na sua instância EC2 com o comando:
+     ```bash
+     sudo gitlab-runner register
+     ```
+   - Configure o **executor** como **Docker** e informe a **URL do GitLab** e **Token**.
 
 ---
 
 ## Passo 6: Testar o Pipeline
 
 1. **Executar o Pipeline**:
-   - Após configurar o Jenkins (ou outra ferramenta CI/CD), execute o pipeline para testar a análise de segurança.
-   - **SonarQube** irá analisar o código-fonte e gerar um relatório de vulnerabilidades e qualidade do código.
-   - **OWASP ZAP** realizará um teste de segurança dinâmico, verificando as vulnerabilidades no ambiente de produção ou staging.
+   - Faça um commit no repositório para a branch `main`:
+     ```bash
+     git add .
+     git commit -m "Configuração inicial do GitLab CI/CD"
+     git push origin main
+     ```
+   - Vá até **CI/CD > Pipelines** no GitLab e veja se o pipeline iniciou corretamente.
 
 2. **Revisar os Resultados**:
    - Acesse o **SonarQube** para visualizar as vulnerabilidades no código.
@@ -175,6 +183,6 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
 ## Passo 7: Conclusão
 
-- Agora, você tem um pipeline **CI/CD** totalmente funcional, **integrando SonarQube para análise de código estático** e **OWASP ZAP para testes dinâmicos** de segurança.
-- Com o uso de **Docker** e **Docker Compose**, o processo foi simplificado, permitindo uma **instância EC2 na AWS** para facilitar a configuração e automação da segurança.
+- Agora, você tem um pipeline **CI/CD** totalmente funcional utilizando **GitLab CI/CD**, **integrando SonarQube para análise de código estático** e **OWASP ZAP para testes dinâmicos** de segurança.
+- Com o uso de **Docker** e **GitLab Runners**, o processo foi simplificado, permitindo uma **instância EC2 na AWS** para facilitar a configuração e automação da segurança.
 - **SonarQube** e **OWASP ZAP** garantem que sua aplicação esteja **segura** em todas as etapas do ciclo de vida de desenvolvimento e deploy, aderindo às melhores práticas de **DevSecOps**.
