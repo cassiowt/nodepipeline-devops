@@ -134,8 +134,8 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
        - security-test
 
      variables:
-       SONAR_HOST_URL: "http://<ec2-public-ip>:8080"
-       SONAR_TOKEN: "<seu-token-sonarqube>"
+       SONAR_HOST_URL: "http://54.91.17.153:8080"
+       SONAR_TOKEN: "$SONAR_TOKEN"
 
      sonarqube-analysis:
        stage: code-analysis
