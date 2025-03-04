@@ -66,7 +66,7 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
          image: sonarqube:lts
          container_name: sonarqube
          ports:
-           - "8080:9000"
+           - "9000:9000"
          environment:
            - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonar
            - SONARQUBE_JDBC_USERNAME=sonar
@@ -104,14 +104,14 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
    - Crie um arquivo `docker-compose.yml` com o seguinte conteúdo:
      ```yaml
-     version: '3'
-     services:
-       zap:
-         image: owasp/zap2docker-stable
-         container_name: owasp_zap
-         ports:
-           - "8081:8080"
-         command: zap.sh -daemon -port 8080
+    version: "3"
+services:
+  zap:
+    image: zaproxy/zap-stable
+    container_name: owasp_zap
+    ports:
+      - "8080:8080"
+    entrypoint: ["zap.sh", "-daemon", "-host", "0.0.0.0", "-port", "8080"]
      ```
 
    - Inicie o **OWASP ZAP**:
