@@ -26,10 +26,11 @@ jobs:
       - name: Run SonarQube Analysis
         run: |
           sonar-scanner \
-            -Dsonar.projectKey=nodepipeline-devops \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.sources=. \
-            -Dsonar.host.url=http://54.91.17.153:9000 \
-            -Dsonar.login=sqp_81eba20518b92faf653aa525c9286fb2c2498c6e
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+
 
   zap_scan:
     name: OWASP ZAP Security Test
