@@ -28,6 +28,7 @@ jobs:
           sonar-scanner \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
 
   zap_scan:
     name: OWASP ZAP Security Test
