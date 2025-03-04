@@ -153,6 +153,26 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
        only:
          - main
      ```
+      1.1
+      **Gerar um Novo Token**
+       * No canto superior direito, clique no seu usuário e vá para "My Account".
+       * Navegue até a aba "Security".
+       * Em "Generate Tokens", insira um nome para o token (ex: GitLabCI).
+       * Escolha o escopo "Analysis Token" e clique em "Generate".
+       * O token será exibido apenas uma vez. Copie e salve em um local seguro.
+
+      1.2
+      **Armazenar o Token no GitLab CI/CD**
+       * Acesse o GitLab e vá para o repositório.
+       * Vá até Settings > CI/CD > Variables.
+       * Clique em "Add Variable" e preencha:
+          - Key: SONAR_TOKEN
+          - Value: (cole o token gerado no SonarQube)
+          - Type: Variable
+          - Mask variable: ✅ (para esconder o valor nos logs)
+      *Salve a variável.
+
+
 
 2. **Habilitar o GitLab Runner**:
    - No GitLab, vá até **Settings > CI/CD > Runners**.
