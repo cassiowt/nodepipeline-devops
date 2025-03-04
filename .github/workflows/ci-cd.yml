@@ -1,0 +1,42 @@
+name: CI/CD Pipeline with SonarQube and OWASP ZAP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  sonar_scan:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install SonarQube Scanner
+        run: |
+          curl -Lo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+          unzip sonar-scanner.zip
+          mv sonar-scanner-4.7.0.2747-linux sonar-scanner
+          echo "$(pwd)/sonar-scanner/bin" >> $GITHUB_PATH
+
+      - name: Run SonarQube Analysis
+        run: |
+          sonar-scanner \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+  zap_scan:
+    name: OWASP ZAP Security Test
+    runs-on: ubuntu-latest
+    needs: sonar_scan
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Run OWASP ZAP Security Scan
+        run: |
+          docker run --rm owasp/zap2docker-stable zap-baseline.py -t ${{ secrets.APPLICATION_URL }}
