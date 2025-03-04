@@ -1,0 +1,23 @@
+stages:
+  - code-analysis
+  - security-test
+
+variables:
+  SONAR_HOST_URL: "http://54.91.17.153:8080"
+  SONAR_TOKEN: "$SONAR_TOKEN"
+
+sonarqube-analysis:
+  stage: code-analysis
+  image: sonarsource/sonar-scanner-cli
+  script:
+    - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+  only:
+    - main
+
+owasp-zap-scan:
+  stage: security-test
+  image: owasp/zap2docker-stable
+  script:
+    - zap-baseline.py -t http://<application-url>
+  only:
+    - main
