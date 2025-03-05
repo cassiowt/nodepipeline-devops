@@ -1,4 +1,4 @@
-name: Deploy to Production  in AWS Aula DevOps
+name: Deploy to Production in AWS Aula DevOps
 
 # Definir os gatilhos para o workflow
 on:
