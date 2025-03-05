@@ -26,8 +26,6 @@ jobs:
         run: |
           sonar-scanner \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.sources=. \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-
-
+            -Dsonar.sources=. \
