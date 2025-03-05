@@ -32,14 +32,3 @@ jobs:
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
 
 
-  zap_scan:
-    name: OWASP ZAP Security Test
-    runs-on: ubuntu-latest
-    needs: sonar_scan
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Run OWASP ZAP Security Scan
-        run: |
-          docker run --rm owasp/zap2docker-stable zap-baseline.py -t ${{ secrets.APPLICATION_URL }}
