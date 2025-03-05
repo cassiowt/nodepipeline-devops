@@ -104,14 +104,15 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 
    - Crie um arquivo `docker-compose.yml` com o seguinte conteúdo:
      ```yaml
-     version: "3"
-       services:
-         zap:
-           image: zaproxy/zap-stable
-           container_name: owasp_zap
-           ports:
-             - "8080:8080"
-           entrypoint: ["zap.sh", "-daemon", "-host", "0.0.0.0", "-port", "8080"]
+      version: "3"
+      services:
+        zap:
+          image: zaproxy/zap-stable
+          container_name: owasp_zap
+          ports:
+            - "8080:8080"
+          entrypoint:
+            ["zap.sh", "-daemon", "-host", "0.0.0.0", "-port", "8080"]
      ```
 
    - Inicie o **OWASP ZAP**:
