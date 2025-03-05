@@ -88,7 +88,7 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
      ```
 
 2. **Acessar SonarQube**:
-   - Abra o navegador e acesse o **SonarQube** em `http://<ec2-public-ip>:8080`.
+   - Abra o navegador e acesse o **SonarQube** em `http://<ec2-public-ip>:9000`.
    - As credenciais padrão são **admin/admin**.
 
 ---
