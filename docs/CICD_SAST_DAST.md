@@ -128,7 +128,7 @@ Este tutorial irá guiá-lo através da configuração de um **pipeline CI/CD** 
 ## Passo 5: Configuração do GitLab CI/CD
 
 1. **Criar um Pipeline GitLab CI/CD**:
-   - Crie um arquivo **`.gitlab-ci.yml`** na raiz do repositório com o seguinte conteúdo:
+   - Crie um arquivo **`cdci-.yml`** em actions
      ```yaml
      stages:
        - code-analysis
