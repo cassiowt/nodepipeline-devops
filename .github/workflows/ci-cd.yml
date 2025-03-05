@@ -1,5 +1,4 @@
-name: CI/CD Pipeline with SonarQube and OWASP ZAP
-
+name: CI/CD Pipeline with SonarQube
 on:
   push:
     branches:
