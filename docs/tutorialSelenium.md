@@ -86,6 +86,7 @@ try:
 finally:
     # Fecha o navegador
     driver.quit()
+```
 
 ## 4. Executar o Script
 
