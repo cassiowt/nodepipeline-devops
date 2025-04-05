@@ -239,19 +239,15 @@ clear
 ```bash
 exit
 ```
-
 * Sai do shell.
+```
 
-```
-```
+## Estruturas de Controle
+
+## Laço For (Iteração)
+
 ```bash
 #!/bin/bash
-
-
-# Estruturas de Controle
-
-# Laço For (Iteração)
-
 # Iterar sobre um intervalo de números
 for i in {1..10}; do
   # Executa o código para cada valor de 'i' de 1 a 10
