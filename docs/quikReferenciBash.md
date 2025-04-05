@@ -1,8 +1,7 @@
 ## Principais Comandos Bash (Com Comentários)
 
-```bash
 # Navegação e Manipulação de Diretórios
-
+```bash
 cd /caminho/do/diretorio
 ```
 
