@@ -38,3 +38,26 @@ def criar_vhost(nome_servidor, diretorio_raiz, porta, email_admin):
 
 # Exemplo de uso
 criar_vhost("meusite.com.br", "/var/www/meusite", 80, "[email protected]")
+```
+## Exemplo 2: Adicionar uma regra de firewall (iptables)
+```python
+import subprocess
+
+def adicionar_regra_firewall(porta, protocolo="tcp", acao="ACCEPT"):
+    """Adiciona uma regra ao iptables para permitir tráfego em uma porta."""
+
+    comando = ["iptables", "-A", "INPUT", "-p", protocolo, "--dport", str(porta), "-j", acao]
+
+    try:
+        resultado = subprocess.run(comando, capture_output=True, text=True, check=True)
+        print(f"Regra de firewall adicionada: {resultado.stdout}")
+    except subprocess.CalledProcessError as e:
+        print(f"Erro ao adicionar regra: {e.stderr}")
+
+# Exemplo de uso
+adicionar_regra_firewall(80, "tcp", "ACCEPT")  # Permite tráfego HTTP
+adicionar_regra_firewall(22, "tcp", "DROP")   # Bloqueia tráfego SSH
+```
+
+
+
