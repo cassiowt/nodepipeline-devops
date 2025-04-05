@@ -1,6 +1,6 @@
-## Principais Comandos Bash (Com Comentários)
+# Principais Comandos Bash (Com Comentários)
 
-# Navegação e Manipulação de Diretórios
+## Navegação e Manipulação de Diretórios
 ```bash
 cd /caminho/do/diretorio
 ```
