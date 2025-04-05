@@ -240,7 +240,6 @@ clear
 exit
 ```
 * Sai do shell.
-```
 
 ## Estruturas de Controle
 
