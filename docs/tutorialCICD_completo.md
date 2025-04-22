@@ -27,6 +27,7 @@ Este projeto simula a implementação prática de um pipeline DevOps completo pa
 ```
 
 4. Criar documento com requisitos técnicos
+   
 ##[Requisitos Técnicos](https://github.com/cassiowt/nodepipeline-devops/blob/main/docs/tutorialCICD_requisitosTecnicos.md/)
 ```markdown
 - Integração contínua com Node.js e GitHub Actions
