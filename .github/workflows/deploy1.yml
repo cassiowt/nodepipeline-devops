@@ -14,19 +14,22 @@ jobs:
     steps:
     # 1. Checar o código do repositório
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
 
     # 2. Configurar Node.js (Exemplo de aplicação Node.js)
     - name: Set up Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v7
       with:
-        node-version: '14'  # Ou qualquer versão necessária para o seu app
+        node-version: '24'  # Ou qualquer versão LTS suportada
 
     # 3. Instalar dependências
     - name: Install dependencies
       run: npm install
 
-    # 4. Rodar os testes (Opcional, pode ser removido se não for necessário)
+    # 4. Verificar o estilo do código e rodar os testes (o deploy só acontece se passarem)
+    - name: Run lint
+      run: npm run lint
+
     - name: Run tests
       run: npm test
 
@@ -44,9 +47,8 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}  # Defina a chave SSH no Secrets
         port: 22
         script: |
-          sudo set enforce 0
-          cd ./aula || git clone https://github.com/cassiowt/nodepipeline-devops.git
-          cd nodepipeline-devops
+          # Clona o repositório na primeira execução; nas seguintes, só atualiza
+          cd ~/nodepipeline-devops 2>/dev/null || { git clone https://github.com/${{ github.repository }}.git ~/nodepipeline-devops && cd ~/nodepipeline-devops; }
           git pull origin main  # Ou outro comando para atualizar o código
           sudo npm install
           sudo pm2 delete server 2>/dev/null

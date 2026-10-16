@@ -2,12 +2,10 @@ const express = require('express');
 const client = require('prom-client');
 const app = express();
 const register = new client.Registry();
-const path = require('path');
 const bodyParser = require('body-parser');
 const os = require('os')
 const hostname = os.hostname()
 
-const router = express.Router();
 const port = 3000;
  
 // Configurar métricas padrão (CPU, Heap, Event Loop)
@@ -56,6 +54,12 @@ app.get('/about', function(req, res) {
 })
 // Server
 
-app.listen(port, function () {
-    console.log('listening on port:' + port);
-});
+// Só abre a porta quando executado diretamente (node server.js);
+// nos testes, o app é importado sem iniciar o servidor
+if (require.main === module) {
+    app.listen(port, function () {
+        console.log('listening on port:' + port);
+    });
+}
+
+module.exports = app;

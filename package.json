@@ -4,7 +4,8 @@
     "description": "AWS Devops nodejs app example",
     "main": "server.js",
     "scripts": {
-        "test": "echo \"Teste OK\"",
+        "test": "jest",
+        "lint": "eslint .",
         "start": "node server.js",
         "build": "npm install && echo \"Build completed\""
     },
@@ -15,5 +16,12 @@
         "ejs": "^3.1.5",
         "express": "^4.17.1",
         "prom-client": "^15.1.3"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.13.0",
+        "globals": "^17.13.0",
+        "jest": "^30.5.2",
+        "supertest": "^7.3.1"
     }
 }

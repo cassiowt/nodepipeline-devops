@@ -53,10 +53,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: '18'
+          node-version: '24'
       - run: npm install
       - run: npm test
 ```
@@ -68,18 +68,31 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Nomes de bucket são únicos no mundo: com bucket_prefix, o Terraform
+# completa o nome com um sufixo aleatório e cada aluno ganha o seu
 resource "aws_s3_bucket" "foodtime_bucket" {
-  bucket = "foodtime-deploy-bucket"
-  acl    = "public-read"
+  bucket_prefix = "foodtime-"
+}
+
+output "bucket_name" {
+  value = aws_s3_bucket.foodtime_bucket.bucket
 }
 ```
 
-3. Executar comandos Terraform
+> Não use um nome fixo (`bucket = "foodtime-deploy-bucket"`): só o primeiro aluno consegue criá-lo. Também não use
+> `acl = "public-read"`: buckets novos têm ACLs desativadas desde abril de 2023 (o `apply` falha com
+> `AccessControlListNotSupported`), e o argumento `acl` está obsoleto no *provider* AWS v4 ou mais novo.
+
+3. Executar comandos Terraform e guardar o nome do bucket como variável do repositório (usada no Módulo 3)
 ```bash
 cd infra
 terraform init
 terraform apply -auto-approve
+gh variable set S3_BUCKET --body "$(terraform output -raw bucket_name)"
 ```
+
+Sem o GitHub CLI (`gh`), copie a saída de `terraform output -raw bucket_name` e crie a variável `S3_BUCKET` em
+**Settings > Secrets and variables > Actions > Variables**.
 
 ---
 
@@ -97,18 +110,28 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: actions/checkout@v7
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
-      - run: aws s3 sync ./src s3://foodtime-deploy-bucket --delete
+      - run: aws s3 sync ./src s3://${{ vars.S3_BUCKET }} --delete
 ```
+
+> **Atenção:** `aws s3 sync` serve para publicar arquivos estáticos (HTML, CSS, JavaScript do navegador). Uma aplicação
+> Express, como a deste repositório, não executa no S3: o código seria apenas copiado. Para implantar a aplicação Node.js,
+> rode-a numa instância EC2 (veja o *workflow* `.github/workflows/deploy1.yml`, que faz o deploy via SSH) ou empacote-a
+> num contêiner com o `Dockerfile` e implante no EC2 ou no ECS.
 
 2. Configurar secrets no GitHub:
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
+- `AWS_SESSION_TOKEN`
+
+No AWS Academy Learner Lab, os três valores ficam em **AWS Details > AWS CLI: Show** e **mudam a cada sessão**: atualize
+os *secrets* sempre que iniciar o laboratório. Sem o `AWS_SESSION_TOKEN`, o deploy falha com erro de credencial.
 
 3. Validar deploy automático:
 - Faça push na branch `main` e verifique se os arquivos foram enviados ao bucket S3.
@@ -121,17 +144,25 @@ jobs:
 1. Executar análise com SonarQube via GitHub Actions
 ```yaml
 - name: SonarQube Scan
-  uses: SonarSource/sonarqube-scan-action@v1.0
+  uses: SonarSource/sonarqube-scan-action@v8
   env:
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 ```
 
-2. Rodar análise com OWASP ZAP via Docker
+2. Rodar análise com OWASP ZAP via Docker (a imagem antiga `owasp/zap2docker-stable` foi removida do Docker Hub)
 ```bash
-docker run -t owasp/zap2docker-stable zap-baseline.py \
+docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-baseline.py \
   -t https://foodtime.com \
   -g gen.conf -r report.html
+```
+
+No GitHub Actions, use a *action* oficial do ZAP:
+```yaml
+- name: ZAP Baseline Scan
+  uses: zaproxy/action-baseline@v0.15.0
+  with:
+    target: 'https://foodtime.com'
 ```
 
 3. Criar alarme de uso de CPU no CloudWatch
