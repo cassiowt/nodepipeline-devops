@@ -21,10 +21,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: '18'
+          node-version: '24'
       - run: npm install
       - run: npm test
 ```
@@ -50,9 +50,14 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# Nomes de bucket são únicos no mundo: com bucket_prefix, o Terraform
+# completa o nome com um sufixo aleatório e cada aluno ganha o seu
 resource "aws_s3_bucket" "foodtime_bucket" {
-  bucket = "foodtime-deploy-bucket"
-  acl    = "public-read"
+  bucket_prefix = "foodtime-"
+}
+
+output "bucket_name" {
+  value = aws_s3_bucket.foodtime_bucket.bucket
 }
 ```
 
@@ -61,6 +66,8 @@ resource "aws_s3_bucket" "foodtime_bucket" {
 cd infra
 terraform init
 terraform apply -auto-approve
+# Guarda o nome do bucket como variável do repositório, usada no deploy
+gh variable set S3_BUCKET --body "$(terraform output -raw bucket_name)"
 ```
 
 ---
@@ -84,18 +91,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: actions/checkout@v7
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
-      - run: aws s3 sync ./src s3://foodtime-deploy-bucket --delete
+      - run: aws s3 sync ./src s3://${{ vars.S3_BUCKET }} --delete
 ```
+
+`aws s3 sync` publica arquivos estáticos; uma aplicação Express não executa no S3 e precisa rodar no EC2 ou no ECS.
 
 ### Secrets Necessários no GitHub
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
+- `AWS_SESSION_TOKEN` (no Learner Lab, os três mudam a cada sessão)
+- Variável `S3_BUCKET` com o nome do bucket criado pelo Terraform
 
 ---
 
@@ -140,7 +152,7 @@ Detectar vulnerabilidades no código (SAST) e em execução (DAST).
 ### SonarQube no GitHub Actions
 ```yaml
 - name: SonarQube Scan
-  uses: SonarSource/sonarqube-scan-action@v1.0
+  uses: SonarSource/sonarqube-scan-action@v8
   env:
     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
@@ -148,9 +160,17 @@ Detectar vulnerabilidades no código (SAST) e em execução (DAST).
 
 ### OWASP ZAP via Docker
 ```bash
-docker run -t owasp/zap2docker-stable zap-baseline.py \
+docker run -v $(pwd):/zap/wrk/:rw -t zaproxy/zap-stable zap-baseline.py \
   -t https://foodtime.com \
   -g gen.conf -r report.html
+```
+
+### OWASP ZAP no GitHub Actions
+```yaml
+- name: ZAP Baseline Scan
+  uses: zaproxy/action-baseline@v0.15.0
+  with:
+    target: 'https://foodtime.com'
 ```
 
 ### Resultado Esperado
